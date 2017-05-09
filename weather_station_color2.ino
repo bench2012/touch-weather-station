@@ -106,8 +106,8 @@ void setup() {
     pinMode(STMPE_IRQ, INPUT_PULLUP); 
   }
   
-  // we'll use D2 for backlight control
-  digitalWrite(LED_CTR, 1);
+  // we'll use D3 for backlight control
+  digitalWrite(LED_CTR,HIGH);
    
   tft.begin();
   tft.fillScreen(ILI9341_BLACK);
@@ -168,7 +168,7 @@ void loop() {
     
     Serial.println("Zzzz");
     // Turn off Backlight
-    digitalWrite(LED_CTR, 0);
+    digitalWrite(LED_CTR,LOW);
 //    tft.fillScreen(ILI9341_BLACK);
 //    spitouch.writeRegister8(STMPE_GPIO_CLR_PIN, _BV(2)); // backlight off  
 //    spitouch.writeRegister8(STMPE_INT_STA, 0xFF);
@@ -186,7 +186,7 @@ void loop() {
   
     // wipe screen & backlight on
     tft.fillScreen(ILI9341_BLACK);
-    digitalWrite(LED_CTR, 1);
+    digitalWrite(LED_CTR,HIGH);
     updateData();
   } 
   else // "standard setup"
