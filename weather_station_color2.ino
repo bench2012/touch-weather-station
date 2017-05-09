@@ -61,9 +61,6 @@ See more at http://blog.squix.ch
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 GfxUi ui = GfxUi(&tft);
 
-//Adafruit_STMPE610 spitouch = Adafruit_STMPE610(STMPE_CS);
-
-
 
 WebResource webResource;
 TimeClient timeClient(UTC_OFFSET);
@@ -97,6 +94,7 @@ WiFiManager wifiManager;
 void setup() {
   Serial.begin(115200);
   touch.setCalibration(209, 1759, 1775, 273);
+  pinMode(LED_CTR, OUTPUT);
 
 //  if (! spitouch.begin()) {
 //    Serial.println("STMPE not found?");
@@ -106,15 +104,10 @@ void setup() {
   if (DEEP_SLEEP) {
     // this pin (#2) is connected to the STMPE IRQ pin
     pinMode(STMPE_IRQ, INPUT_PULLUP); 
-    // tell the STMPE to use 'low' level as 'touched' indicator
-//    spitouch.writeRegister8(STMPE_INT_CTRL, STMPE_INT_CTRL_POL_LOW | STMPE_INT_CTRL_ENABLE);
   }
   
-  // we'll use STMPE's GPIO 2 for backlight control
-//  spitouch.writeRegister8(STMPE_GPIO_DIR, _BV(2));
-//  spitouch.writeRegister8(STMPE_GPIO_ALT_FUNCT, _BV(2));
-  // backlight on
-//  spitouch.writeRegister8(STMPE_GPIO_SET_PIN, _BV(2));
+  // we'll use D2 for backlight control
+  digitalWrite(LED_CTR, 1);
    
   tft.begin();
   tft.fillScreen(ILI9341_BLACK);
@@ -174,7 +167,9 @@ void loop() {
     }
     
     Serial.println("Zzzz");
-    tft.fillScreen(ILI9341_BLACK);
+    // Turn off Backlight
+    digitalWrite(LED_CTR, 0);
+//    tft.fillScreen(ILI9341_BLACK);
 //    spitouch.writeRegister8(STMPE_GPIO_CLR_PIN, _BV(2)); // backlight off  
 //    spitouch.writeRegister8(STMPE_INT_STA, 0xFF);
 
@@ -191,7 +186,7 @@ void loop() {
   
     // wipe screen & backlight on
     tft.fillScreen(ILI9341_BLACK);
-//    spitouch.writeRegister8(STMPE_GPIO_SET_PIN, _BV(2));
+    digitalWrite(LED_CTR, 1);
     updateData();
   } 
   else // "standard setup"
