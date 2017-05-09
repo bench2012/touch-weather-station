@@ -156,7 +156,6 @@ void loop() {
     // turn off the display and wait for a touch!
     // flush the touch buffer
     while (touch.isTouching()) {
-//      spitouch.getPoint();
     touch.getPosition(x, y);
       Serial.print('.');
       yield();
@@ -180,6 +179,7 @@ void loop() {
   
     // wipe screen & backlight on
     tft.fillScreen(ILI9341_BLACK);
+    // Turn on back light
     digitalWrite(LED_CTR,HIGH);
     updateData();
   } 
