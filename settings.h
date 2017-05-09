@@ -30,7 +30,7 @@ int     AWAKE_TIME = 10;                   // how many seconds to stay 'awake' b
 
 // pins for the touchscreen
 //#define STMPE_CS 4
-#define STMPE_IRQ 5
+#define T_IRQ 5
 #define LED_CTR D3
 
 // For the Esp connection of touch
