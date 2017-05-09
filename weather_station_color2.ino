@@ -96,14 +96,10 @@ void setup() {
   touch.setCalibration(209, 1759, 1775, 273);
   pinMode(LED_CTR, OUTPUT);
 
-//  if (! spitouch.begin()) {
-//    Serial.println("STMPE not found?");
-//  }
-
-  // if using deep sleep, we can use the STMPE's IRQ pin to wake us up
+  // if using deep sleep, we can use the TIRQ's IRQ pin to wake us up
   if (DEEP_SLEEP) {
-    // this pin (#2) is connected to the STMPE IRQ pin
-    pinMode(STMPE_IRQ, INPUT_PULLUP); 
+    // this pin (#2) is connected to the tjctm24028 IRQ pin
+    pinMode(T_IRQ, INPUT_PULLUP); 
   }
   
   // we'll use D3 for backlight control
@@ -170,12 +166,10 @@ void loop() {
     // Turn off Backlight
     digitalWrite(LED_CTR,LOW);
 //    tft.fillScreen(ILI9341_BLACK);
-//    spitouch.writeRegister8(STMPE_GPIO_CLR_PIN, _BV(2)); // backlight off  
-//    spitouch.writeRegister8(STMPE_INT_STA, 0xFF);
 
 
     if (DEEP_SLEEP) {
-      sleepNow(STMPE_IRQ);
+      sleepNow(T_IRQ);
     } else {
       while (! touch.isTouching()) {
         // twiddle thumbs
