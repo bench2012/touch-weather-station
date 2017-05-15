@@ -294,7 +294,8 @@ void drawTime() {
   ui.drawString(120, 20, date);
   
   tft.setFont(&ArialRoundedMTBold_36);
-  String time = timeClient.getHours() + ":" + timeClient.getMinutes();
+  //Added second display
+  String time = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds();
   ui.drawString(120, 56, time);
   drawSeparator(65);
 }
