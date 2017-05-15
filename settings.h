@@ -43,7 +43,7 @@ const float UTC_OFFSET = 8;
 
 // Wunderground Settings
 const boolean IS_METRIC = true;
-const String WUNDERGRROUND_API_KEY = "1e0e8ad07e605f06";
+const String WUNDERGRROUND_API_KEY = "<API_KEY";
 const String WUNDERGRROUND_LANGUAGE = "EN";
 const String WUNDERGROUND_COUNTRY = "HongKong";
 const String WUNDERGROUND_CITY = "HongKong";
