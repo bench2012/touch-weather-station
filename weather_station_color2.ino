@@ -85,6 +85,10 @@ void drawSeparator(uint16_t y);
 void sleepNow(int wakeup);
 
 long lastDownloadUpdate = millis();
+int  seconds;
+String Hours;
+String Minutes; 
+
 
 
 //WiFiManager
@@ -92,6 +96,8 @@ long lastDownloadUpdate = millis();
 WiFiManager wifiManager;
   
 void setup() {
+  Hours = timeClient.getHours();
+  Minutes = timeClient.getMinutes();
   Serial.begin(115200);
   touch.setCalibration(209, 1759, 1775, 273);
   pinMode(LED_CTR, OUTPUT);
@@ -143,6 +149,8 @@ void setup() {
 long lastDrew = 0;
 void loop() {
   uint16_t x, y;
+
+  String inSeconds;
   if (USE_TOUCHSCREEN_WAKE) {     // determine in settings.h!
     
     // for AWAKE_TIME seconds we'll hang out and wait for OTA updates
@@ -164,13 +172,13 @@ void loop() {
     Serial.println("Zzzz");
     // Turn off Backlight
     digitalWrite(LED_CTR,LOW);
-//    tft.fillScreen(ILI9341_BLACK);
+    tft.fillScreen(ILI9341_BLACK);
 
 
     if (DEEP_SLEEP) {
       sleepNow(T_IRQ);
     } else {
-      while (! touch.isTouching()) {
+      while (!touch.isTouching()) {
         // twiddle thumbs
         delay(10);
       }
@@ -189,7 +197,16 @@ void loop() {
     ArduinoOTA.handle();
 
     // Check if we should update the clock
-    if (millis() - lastDrew > 30000 && wunderground.getSeconds() == "00") {
+//    if (millis() - lastDrew > 30000 && wunderground.getSeconds() == "00") {
+      inSeconds = timeClient.getSeconds();
+      seconds = inSeconds.toInt();
+      if (millis() - lastDrew > 999) {
+        
+        if (seconds > 59) {
+          seconds = 0;
+        }
+        else 
+          seconds = seconds + 1;          
       drawTime();
       lastDrew = millis();
     }
@@ -201,7 +218,6 @@ void loop() {
     }
   }
 }
-
 // Called if WiFi has not been configured yet
 void configModeCallback (WiFiManager *myWiFiManager) {
   ui.setTextAlignment(CENTER);
@@ -229,7 +245,6 @@ void downloadCallback(String filename, int16_t bytesDownloaded, int16_t bytesTot
     //ui.drawString(120, 160, String(percentage) + "%");
     ui.drawProgressBar(10, 165, 240 - 20, 15, percentage, ILI9341_WHITE, ILI9341_BLUE);
   }
-
 }
 
 // Download the bitmaps
@@ -287,6 +302,7 @@ void drawProgress(uint8_t percentage, String text) {
 
 // draws the clock
 void drawTime() {
+
   ui.setTextAlignment(CENTER);
   ui.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
   tft.setFont(&ArialRoundedMTBold_14);
@@ -294,8 +310,12 @@ void drawTime() {
   ui.drawString(120, 20, date);
   
   tft.setFont(&ArialRoundedMTBold_36);
-  String time = timeClient.getHours() + ":" + timeClient.getMinutes() + ":" + timeClient.getSeconds();
-  ui.drawString(92, 56, time);
+  if (seconds == 60) {
+    Hours = timeClient.getHours();
+    Minutes = timeClient.getMinutes();
+  }
+  String time = Hours + ":" + Minutes + ":" + String(seconds);
+  ui.drawString(120, 56, time);
   drawSeparator(65);
 }
 
